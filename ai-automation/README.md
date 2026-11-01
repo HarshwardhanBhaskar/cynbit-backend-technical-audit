@@ -1,63 +1,90 @@
-# AI Automation Task
+# AI Automation Deliverable — Candidate Screening & Triage Agent
 
-> **Status:** Placeholder — Awaiting Official Task Instructions
+> **Assessment Track:** Autonomous AI Workflow Deliverable  
+> **Target Process:** Cynbit Talent Acquisition Pipeline (`/careers/backend-developer-intern`)  
+> **Status:** Implemented & Fully Tested  
 
 ---
 
-## Purpose
+## 1. Executive Summary
 
-This directory is reserved for the AI Automation component of the Cynbit Technologies Backend Developer Intern Assessment.
+This deliverable provides an autonomous **AI Candidate Screening & Triage Agent** designed to automate the initial qualification review of prospective software engineers. 
 
-## Current Status
+To prevent LLM hallucinations on objective compliance criteria (e.g., terms consent, minimum age, cohort eligibility), the architecture separates evaluation into:
+1. **Tier-1 Deterministic Hard Gates (Zero LLM Tokens):** Instant rule checks for legal consent, valid contact syntax, and graduation window.
+2. **Tier-2 Contextual Architectural Scoring (LLM / Heuristic Engine):** Deep evaluation of technical competencies (PostgreSQL, Python, AsyncIO, REST/GraphQL, Docker, JWT) with structured JSON output and candidate notification drafting.
 
-The official AI Automation task instructions have **not yet been provided**. This placeholder exists to:
+---
 
-1. Maintain the expected repository structure
-2. Signal readiness to implement the automation task
-3. Ensure the task remains independent from the backend audit
-
-## What Will Be Implemented (Once Instructions Are Provided)
-
-Upon receiving the official task requirements, this directory will contain:
-
-| Component | Description |
-|---|---|
-| **Workflow Architecture** | System design and flow diagrams |
-| **Implementation** | Working code with clear entry points |
-| **Error Handling** | Robust error management and fallback logic |
-| **Logging** | Structured logging for workflow visibility |
-| **Testing** | Unit and integration tests |
-| **Setup Instructions** | Environment setup and dependency installation |
-| **Demo Instructions** | How to run and verify the implementation |
-
-## Expected Structure (Once Implemented)
+## 2. Directory Layout
 
 ```
 ai-automation/
-├── README.md              ← This file (will be updated)
-├── requirements.txt       ← Dependencies
+├── README.md               # Deliverable documentation & execution guide
+├── architecture.md         # Visual architecture & deterministic vs LLM separation
+├── workflow.md             # 5-stage lifecycle & failure/retry policies
+├── requirements.txt        # Python dependencies
 ├── src/
-│   ├── main.py            ← Entry point
-│   ├── workflow.py         ← Core workflow logic
-│   ├── config.py           ← Configuration
-│   └── utils.py            ← Utilities
-├── tests/
-│   └── test_workflow.py    ← Test suite
-└── docs/
-    └── architecture.md     ← Workflow architecture diagram
+│   ├── __init__.py
+│   ├── agent.py            # Central workflow orchestrator (CandidateScreeningAgent)
+│   ├── extractor.py        # Tokenizer & competency extractor
+│   ├── evaluator.py        # Tier-1 hard gates & Tier-2 scoring engine
+│   └── notifier.py         # Candidate & HR notification generator
+└── tests/
+    ├── __init__.py
+    └── test_workflow.py    # Automated test suite (pytest)
 ```
-
-## Design Principles
-
-Regardless of the specific task, the implementation will follow these principles:
-
-- **Modular design** — separate concerns into distinct modules
-- **Error resilience** — handle failures gracefully with retries and fallbacks
-- **Observability** — structured logging at every stage
-- **Testability** — comprehensive unit and integration tests
-- **Documentation** — clear setup and execution instructions
-- **Security** — environment variables for secrets, input validation
 
 ---
 
-> **Note:** This placeholder will be replaced with the full implementation once the official AI Automation task requirements are provided. The implementation will be kept independent from the backend audit unless the requirements explicitly connect them.
+## 3. Setup & Execution
+
+### 3.1 Installation
+```bash
+cd ai-automation
+python -m venv venv
+venv\Scripts\activate      # Windows
+# source venv/bin/activate # Linux/macOS
+pip install -r requirements.txt
+```
+
+### 3.2 Running the Automated Tests
+```bash
+pytest -v tests/test_workflow.py
+```
+
+### 3.3 Programmatic Usage Example
+```python
+import asyncio
+from src.agent import CandidateScreeningAgent
+
+async def main():
+    agent = CandidateScreeningAgent()  # Or pass openai_api_key="sk-..."
+    
+    candidate_submission = {
+        "full_name": "Harshwardhan Bhaskar",
+        "email": "harshwardhan@example.com",
+        "phone": "+919876543210",
+        "graduation_year": 2025,
+        "agreed_to_terms": True,
+        "skills": ["Python", "FastAPI", "PostgreSQL", "Docker", "AsyncIO"],
+        "application_statement": "Deeply interested in scalable backend architectures and API security.",
+        "architectural_narrative": "Designed relational schemas with composite indexing, asyncpg connection pooling, and JWT with RBAC."
+    }
+    
+    report = await agent.process_candidate(candidate_submission)
+    print(f"Candidate: {report.candidate_name}")
+    print(f"Decision:  {report.decision} (Score: {report.overall_score}/100)")
+    print(f"Tier:      {report.evaluation_tier}")
+    print(f"Action:    {report.notification.action_required}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+---
+
+## 4. Key Strengths
+- **Zero Hallucination on Compliance:** Legal consent and mandatory fields cannot be bypassed by clever prompting.
+- **Resilient Fallback:** Works fully offline using the built-in deterministic heuristic rubric even if external LLM APIs are unreachable.
+- **Production Telemetry:** Captures full execution metrics and timing in milliseconds.
