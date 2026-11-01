@@ -101,6 +101,28 @@ Below are the exact DOM structures observed via Chrome DevTools Elements Inspect
 </div>
 ```
 
+### 1.2 Visually Documented Application Fields (Pending Exact DOM Attribute Extraction)
+
+The following fields were visually confirmed in the modal UI during inspection:
+
+| Visual Field | Observed UI Presentation | Observed Options / Constraints | Verification Status |
+|---|---|---|---|
+| **Education & Qualification** | Modular section with institution entry | Repeatable card component | Visual Observation |
+| **Add Another Qualification** | Interactive button element | Triggers dynamic form repeater | Visual Observation |
+| **Graduation Year** | Select dropdown / numeric entry | Cohort targets (2024, 2025, 2026, 2027) | Visual Observation |
+| **Education Status** | Selection / radio options | "Pursuing", "Completed" | Visual Observation |
+| **Score System** | Selection menu | CGPA (out of 10), Percentage (out of 100) | Visual Observation |
+| **Score Value** | Decimal / integer text input | Numeric grade entry (e.g. 8.5, 85%) | Visual Observation |
+| **Notice Period** | Dropdown / text option | "Immediate", "15 Days", "1 Month" | Visual Observation |
+| **Key Technical Skills** | Tag-based input / text field | Backend technologies (Python, Postgres, etc.) | Visual Observation |
+| **Portfolio / Resume Link** | URL input field | External URL link to PDF / portfolio | Visual Observation |
+| **LinkedIn Profile URL** | URL input field | External URL (linkedin.com/in/...) | Visual Observation |
+| **GitHub / Behance Profile** | Optional URL input field | Developer / designer profile links | Visual Observation |
+| **Why Cynbit? / Statement** | Multiline `<textarea>` | Personal application narrative | Visual Observation |
+| **Architectural Narrative** | Multiline `<textarea>` | Technical architecture writeup | Visual Observation |
+
+> **Ethical Note:** In strict compliance with audit rules, we do not fabricate the exact backend column mappings, internal HTML names, or proprietary API payload structures for these fields. They are fully implemented in our reference backend as proposed schemas.
+
 ---
 
 ## 2. Safe Functional Testing Matrix
